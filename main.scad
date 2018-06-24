@@ -12,35 +12,73 @@ sm = 8*sm_base;
 
 include <params.scad>
  
-module EVW_pot() {
+module EVW_leads(t=0) {
+  // bottom leads
+  translate([-EVW_pot_lead_bw/2-t,-EVW_pot_bye,-t]) 
+    cube([EVW_pot_lead_bw+2*t,EVW_pot_bye-EVW_pot_by+1,EVW_pot_lead_h+2*t]);
+  translate([EVW_pot_lead_s-EVW_pot_lead_bw/2-t,-EVW_pot_bye,-t]) 
+    cube([EVW_pot_lead_bw+2*t,EVW_pot_bye-EVW_pot_by+1,EVW_pot_lead_h+2*t]);
+  translate([-EVW_pot_lead_s-EVW_pot_lead_bw/2-t,-EVW_pot_bye,-t]) 
+    cube([EVW_pot_lead_bw+2*t,EVW_pot_bye-EVW_pot_by+1,EVW_pot_lead_h+2*t]);
+  // top lead
+  translate([-EVW_pot_lead_tw/2-t,EVW_pot_ty-1,-t]) 
+    cube([EVW_pot_lead_tw+2*t,EVW_pot_tye-EVW_pot_ty+1,EVW_pot_lead_h+2*t]);
+}
+module EVW_sleeve(t=0) {
+  translate([0,0,-EVW_pot_sleeve_h-t]) 
+    cylinder(r=EVW_pot_sleeve_r+t,h=EVW_pot_sleeve_h+EVW_pot_z+t,$fn=sm);
+}
+module EVW_pins(t=0) {
+  translate([-EVW_pin_s/2,0,-EVW_pin_h-t]) cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=sm);
+  translate([ EVW_pin_s/2,0,-EVW_pin_h-t]) cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=sm);
+}
+module EVW_pot(leads=true,pins=true,sleeve=true,t=0) {
   difference() {
     union() {
-      cylinder(r=EVW_pot_ty,h=EVW_pot_z,$fn=sm);
-      translate([-EVW_pot_x/2,-EVW_pot_my/2,0]) cube([EVW_pot_x,EVW_pot_my,EVW_pot_z]);
-      translate([-EVW_pot_mxe/2,-EVW_pot_mye/2,0]) cube([EVW_pot_mxe,EVW_pot_mye,EVW_pot_z]);
-      translate([-EVW_pot_bx/2,-EVW_pot_by,0]) cube([EVW_pot_bx,EVW_pot_by,EVW_pot_z]);
-      translate([-EVW_pin_s/2,0,-EVW_pin_h]) cylinder(r=EVW_pin_r,h=EVW_pin_h+EVW_pot_z,$fn=sm);
-      translate([ EVW_pin_s/2,0,-EVW_pin_h]) cylinder(r=EVW_pin_r,h=EVW_pin_h+EVW_pot_z,$fn=sm);
-      difference() {
-        translate([0,0,-EVW_pot_sleeve_h]) cylinder(r=EVW_pot_sleeve_r,h=EVW_pot_sleeve_h+EVW_pot_z,$fn=sm);
+      translate([0,0,-t]) cylinder(r=EVW_pot_ty+t,h=EVW_pot_z+2*t,$fn=sm);
+      translate([-EVW_pot_x/2-t,-EVW_pot_my/2-t,-t]) cube([EVW_pot_x+2*t,EVW_pot_my+2*t,EVW_pot_z+2*t]);
+      translate([-EVW_pot_mxe/2-t,-EVW_pot_mye/2-t,-t]) cube([EVW_pot_mxe+2*t,EVW_pot_mye+2*t,EVW_pot_z+2*t]);
+      translate([-EVW_pot_bx/2-t,-EVW_pot_by-t,-t]) cube([EVW_pot_bx+2*t,EVW_pot_by+2*t,EVW_pot_z+2*t]);
+      if (pins) {
+        EVW_pins(t);
+      }
+      if (sleeve) {
+        EVW_sleeve(t);
       }
     }
+    // D shaft hole
     difference() {
       translate([0,0,-EVW_pot_sleeve_h-1]) cylinder(r=EVW_pot_sleeve_ir,h=EVW_pot_sleeve_h+EVW_pot_z+2,$fn=sm);
       translate([-2.1*EVW_pot_sleeve_ir/2,(EVW_pot_sleeve_ir-EVW_pot_sleeve_hr),-EVW_pot_sleeve_ih-1]) 
         cube([2.1*EVW_pot_sleeve_ir,2.1*EVW_pot_sleeve_ir,EVW_pot_sleeve_h+EVW_pot_z+4]);
     }
   }
-  // bottom leads
-  translate([-EVW_pot_lead_bw/2,-EVW_pot_bye,0]) 
-    cube([EVW_pot_lead_bw,EVW_pot_bye-EVW_pot_by+1,EVW_pot_lead_h]);
-  translate([EVW_pot_lead_s-EVW_pot_lead_bw/2,-EVW_pot_bye,0]) 
-    cube([EVW_pot_lead_bw,EVW_pot_bye-EVW_pot_by+1,EVW_pot_lead_h]);
-  translate([-EVW_pot_lead_s-EVW_pot_lead_bw/2,-EVW_pot_bye,0]) 
-    cube([EVW_pot_lead_bw,EVW_pot_bye-EVW_pot_by+1,EVW_pot_lead_h]);
-  // top lead
-  translate([-EVW_pot_lead_tw/2,EVW_pot_ty-1,0]) 
-    cube([EVW_pot_lead_tw,EVW_pot_tye-EVW_pot_ty+1,EVW_pot_lead_h]);
+  if (leads) {
+    EVW_leads(t);
+  }
+}
+
+module EVW_body_hull(t=0) {
+  hull() {
+    EVW_pot(leads=false,pins=false,sleeve=false,t=t);
+  }
+}
+module EVW_leads_hull(t=0) {
+  hull() {
+    EVW_leads(t);
+  }
+}
+// hull for placement
+module EVW_hull(t=tol) {
+  EVW_body_hull(t);
+  EVW_leads_hull(t);
+  EVW_sleeve(t);
+  EVW_pins(t/4);
 }
 
 EVW_pot();
+//EVW_pot(leads=false,pins=false,sleeve=false);
+//EVW_body_hull();
+//EVW_leads();
+//EVW_leads_hull();
+color([0.5,0.3,0.3,0.5]) EVW_hull(tol);
