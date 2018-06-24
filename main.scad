@@ -72,6 +72,11 @@ module EVW_leads_hull(t=0) {
     EVW_leads(t);
   }
 }
+module EVW_bot_leads_hull(t=0) {
+  translate([0,0,-EVW_pot_z]) hull() {
+    EVW_leads(t);
+  }
+}
 // hull for placement
 module EVW_hull(t=tol) {
   EVW_body_hull(t);
