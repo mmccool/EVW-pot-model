@@ -33,7 +33,7 @@ module EVW_pins(t=0) {
   translate([ EVW_pin_s/2,0,-EVW_pin_h-t]) cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=sm);
 }
 module EVW_pot(leads=true,pins=true,sleeve=true,t=0) {
-  difference() {
+  translate([0,0,-EVW_pot_z]) difference() {
     union() {
       translate([0,0,-t]) cylinder(r=EVW_pot_ty+t,h=EVW_pot_z+2*t,$fn=sm);
       translate([-EVW_pot_x/2-t,-EVW_pot_my/2-t,-t]) cube([EVW_pot_x+2*t,EVW_pot_my+2*t,EVW_pot_z+2*t]);
@@ -54,7 +54,7 @@ module EVW_pot(leads=true,pins=true,sleeve=true,t=0) {
     }
   }
   if (leads) {
-    EVW_leads(t);
+    translate([0,0,-EVW_pot_z]) EVW_leads(t);
   }
 }
 
@@ -64,7 +64,7 @@ module EVW_body_hull(t=0) {
   }
 }
 module EVW_leads_hull(t=0) {
-  hull() {
+  translate([0,0,-EVW_pot_z]) hull() {
     EVW_leads(t);
   }
 }
@@ -72,8 +72,8 @@ module EVW_leads_hull(t=0) {
 module EVW_hull(t=tol) {
   EVW_body_hull(t);
   EVW_leads_hull(t);
-  EVW_sleeve(t);
-  EVW_pins(t/4);
+  translate([0,0,-EVW_pot_z]) EVW_sleeve(t);
+  translate([0,0,-EVW_pot_z]) EVW_pins(t/4);
 }
 
 EVW_pot();
