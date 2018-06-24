@@ -12,17 +12,21 @@ sm = 8*sm_base;
 
 include <params.scad>
  
-module EVW_leads(t=0) {
-  // bottom leads
+module EVW_top_lead(t=0) {
+  translate([-EVW_pot_lead_tw/2-t,EVW_pot_ty-1,-t]) 
+    cube([EVW_pot_lead_tw+2*t,EVW_pot_tye-EVW_pot_ty+1,EVW_pot_lead_h+2*t]);
+}
+module EVW_bot_leads(t=0) {
   translate([-EVW_pot_lead_bw/2-t,-EVW_pot_bye,-t]) 
     cube([EVW_pot_lead_bw+2*t,EVW_pot_bye-EVW_pot_by+1,EVW_pot_lead_h+2*t]);
   translate([EVW_pot_lead_s-EVW_pot_lead_bw/2-t,-EVW_pot_bye,-t]) 
     cube([EVW_pot_lead_bw+2*t,EVW_pot_bye-EVW_pot_by+1,EVW_pot_lead_h+2*t]);
   translate([-EVW_pot_lead_s-EVW_pot_lead_bw/2-t,-EVW_pot_bye,-t]) 
     cube([EVW_pot_lead_bw+2*t,EVW_pot_bye-EVW_pot_by+1,EVW_pot_lead_h+2*t]);
-  // top lead
-  translate([-EVW_pot_lead_tw/2-t,EVW_pot_ty-1,-t]) 
-    cube([EVW_pot_lead_tw+2*t,EVW_pot_tye-EVW_pot_ty+1,EVW_pot_lead_h+2*t]);
+}
+module EVW_leads(t=0) {
+  EVW_top_lead(t=t);
+  EVW_bot_leads(t=t);
 }
 module EVW_sleeve(t=0) {
   translate([0,0,-EVW_pot_sleeve_h-t]) 
