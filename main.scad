@@ -86,7 +86,7 @@ module EVW_hull(t=0.3) {
   EVW_body_hull(t);
   EVW_leads_hull(t);
   translate([0,0,-EVW_pot_z]) EVW_sleeve(t=t,rt=t);
-  translate([0,0,-EVW_pot_z]) EVW_pins(t/4);
+  translate([0,0,-EVW_pot_z]) EVW_pins(t=2*t/3);
 }
 
 EVW_pot();
