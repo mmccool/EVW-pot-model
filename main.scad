@@ -33,16 +33,21 @@ module EVW_sleeve(t=0) {
     cylinder(r=EVW_pot_sleeve_r+t,h=EVW_pot_sleeve_h+EVW_pot_z+t,$fn=sm);
 }
 module EVW_pins(t=0) {
-  translate([-EVW_pin_s/2,0,-EVW_pin_h-t]) cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=sm);
-  translate([ EVW_pin_s/2,0,-EVW_pin_h-t]) cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=sm);
+  translate([-EVW_pin_s/2,0,-EVW_pin_h-t])
+    cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=sm);
+  translate([ EVW_pin_s/2,0,-EVW_pin_h-t])
+    cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=sm);
 }
 module EVW_pot(leads=true,pins=true,sleeve=true,t=0) {
   translate([0,0,-EVW_pot_z]) difference() {
     union() {
       translate([0,0,-t]) cylinder(r=EVW_pot_ty+t,h=EVW_pot_z+2*t,$fn=sm);
-      translate([-EVW_pot_x/2-t,-EVW_pot_my/2-t,-t]) cube([EVW_pot_x+2*t,EVW_pot_my+2*t,EVW_pot_z+2*t]);
-      translate([-EVW_pot_mxe/2-t,-EVW_pot_mye/2-t,-t]) cube([EVW_pot_mxe+2*t,EVW_pot_mye+2*t,EVW_pot_z+2*t]);
-      translate([-EVW_pot_bx/2-t,-EVW_pot_by-t,-t]) cube([EVW_pot_bx+2*t,EVW_pot_by+2*t,EVW_pot_z+2*t]);
+      translate([-EVW_pot_x/2-t,-EVW_pot_my/2-t,-t])
+        cube([EVW_pot_x+2*t,EVW_pot_my+2*t,EVW_pot_z+2*t]);
+      translate([-EVW_pot_mxe/2-t,-EVW_pot_mye/2-t,-t])
+        cube([EVW_pot_mxe+2*t,EVW_pot_mye+2*t,EVW_pot_z+2*t]);
+      translate([-EVW_pot_bx/2-t,-EVW_pot_by-t,-t])
+        cube([EVW_pot_bx+2*t,EVW_pot_by+2*t,EVW_pot_z+2*t]);
       if (pins) {
         EVW_pins(t);
       }
@@ -52,8 +57,11 @@ module EVW_pot(leads=true,pins=true,sleeve=true,t=0) {
     }
     // D shaft hole
     difference() {
-      translate([0,0,-EVW_pot_sleeve_h-1]) cylinder(r=EVW_pot_sleeve_ir,h=EVW_pot_sleeve_h+EVW_pot_z+2,$fn=sm);
-      translate([-2.1*EVW_pot_sleeve_ir/2,(EVW_pot_sleeve_ir-EVW_pot_sleeve_hr),-EVW_pot_sleeve_ih-1]) 
+      translate([0,0,-EVW_pot_sleeve_h-1]) 
+        cylinder(r=EVW_pot_sleeve_ir,h=EVW_pot_sleeve_h+EVW_pot_z+2,$fn=sm);
+      translate([-2.1*EVW_pot_sleeve_ir/2,
+                 (EVW_pot_sleeve_ir-EVW_pot_sleeve_hr),
+                 -EVW_pot_sleeve_ih-1]) 
         cube([2.1*EVW_pot_sleeve_ir,2.1*EVW_pot_sleeve_ir,EVW_pot_sleeve_h+EVW_pot_z+4]);
     }
   }
@@ -78,8 +86,9 @@ module EVW_bot_leads_hull(t=0) {
   }
 }
 module EVW_top_lead_hull(t=0) {
-  translate([0,0,-EVW_pot_z])
+  translate([0,0,-EVW_pot_z]) hull() {
     EVW_top_lead(t);
+  }
 }
 // hull for placement
 module EVW_hull(t=tol) {
