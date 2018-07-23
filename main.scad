@@ -3,13 +3,7 @@
 // Depends on: 
 //   https://github.com/mmccool/openscad-library (put in OPENSCADPATH)
 include <tols.scad>
-
-// Uncomment "model" to speed rendering during modelling, "make" when ready to export STL
-include <smooth_model.scad>
-//include <smooth_make.scad>
-
-sm = 8*sm_base;
-
+include <smooth.scad>
 include <params.scad>
  
 module EVW_top_lead(t=0) {
@@ -30,16 +24,16 @@ module EVW_leads(t=0) {
 }
 module EVW_sleeve(t=0,rt=0) {
   translate([0,0,-EVW_pot_sleeve_h-t-rt]) 
-    cylinder(r=EVW_pot_sleeve_r+t,h=EVW_pot_sleeve_h+EVW_pot_z+t+rt,$fn=sm);
+    cylinder(r=EVW_pot_sleeve_r+t,h=EVW_pot_sleeve_h+EVW_pot_z+t+rt,$fn=EVW_sleeve_sm);
 }
 module EVW_pins(t=0) {
-  translate([-EVW_pin_s/2,0,-EVW_pin_h-t]) cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=sm);
-  translate([ EVW_pin_s/2,0,-EVW_pin_h-t]) cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=sm);
+  translate([-EVW_pin_s/2,0,-EVW_pin_h-t]) cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=EVW_pin_sm);
+  translate([ EVW_pin_s/2,0,-EVW_pin_h-t]) cylinder(r=EVW_pin_r+t,h=EVW_pin_h+EVW_pot_z+2*t,$fn=EVW_pin_sm);
 }
 module EVW_pot(leads=true,pins=true,sleeve=true,t=0,rt=0) {
   translate([0,0,-EVW_pot_z]) difference() {
     union() {
-      translate([0,0,-t]) cylinder(r=EVW_pot_ty+t,h=EVW_pot_z+2*t,$fn=sm);
+      translate([0,0,-t]) cylinder(r=EVW_pot_ty+t,h=EVW_pot_z+2*t,$fn=EVW_pot_sm);
       translate([-EVW_pot_x/2-t,-EVW_pot_my/2-t,-t]) cube([EVW_pot_x+2*t,EVW_pot_my+2*t,EVW_pot_z+2*t]);
       translate([-EVW_pot_mxe/2-t,-EVW_pot_mye/2-t,-t]) cube([EVW_pot_mxe+2*t,EVW_pot_mye+2*t,EVW_pot_z+2*t]);
       translate([-EVW_pot_bx/2-t,-EVW_pot_by-t,-t]) cube([EVW_pot_bx+2*t,EVW_pot_by+2*t,EVW_pot_z+2*t]);

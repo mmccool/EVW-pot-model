@@ -3,11 +3,7 @@
 // Depends on: 
 //   https://github.com/mmccool/openscad-library (put in OPENSCADPATH)
 include <tols.scad>
-
-// Uncomment "model" to speed rendering during modelling,
-// "make" when ready to export STL
-include <smooth_model.scad>
-//include <smooth_make.scad>
+include <smooth.scad>
 
 EVW_pot_x = 10.6;
 EVW_pot_bx = 8.4;
@@ -42,5 +38,8 @@ EVW_hole2_r = (1.1 + 0.05)/2;
 EVW_pin_s = 9.4; 
 EVW_hole_s = 9.4; 
 EVW_hole_s_tol = 0.05; 
-EVW_pot_sm = 4*sm;
+EVW_sm = sm_base;
+EVW_pot_sm = 8*EVW_sm;
+EVW_sleeve_sm = 8*EVW_sm;
+EVW_pin_sm = 4*EVW_sm;
  
